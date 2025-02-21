@@ -16,12 +16,10 @@ export const Route = createFileRoute('/datasets/$id')({
 })
 
 function DatasetComponent() {
+  const selectedDataset = useStore($selectedDataset)
   const [analysisName, setAnalysisName] = useState('')
   const [question, setQuestion] = useState('')
   const [loading, setLoading] = useState(false)
-
-  const selectedDataset = useStore($selectedDataset)
-  const selectedAnalysis = useStore($selectedAnalysis)
 
   const handleAnalysis = async () => {
     if (!selectedDataset || !question || !analysisName) return
@@ -99,21 +97,6 @@ function DatasetComponent() {
                   ))}
                 </Accordion>
               </div>
-            </div>
-          )}
-          {selectedAnalysis && (
-            <div className="p-4 rounded-lg border bg-accent">
-              <h3 className="text-md font-medium mb-2">Analysis Results</h3>
-              {loading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                </div>
-              ) : (
-                <div
-                  className="prose prose-sm max-w-none dark:prose-invert"
-                  dangerouslySetInnerHTML={{ __html: marked(selectedAnalysis.result || '') }}
-                />
-              )}
             </div>
           )}
         </div>
