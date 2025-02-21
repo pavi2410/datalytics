@@ -5,8 +5,9 @@ import { $selectedDataset, $selectedAnalysis, createAnalysis, $selectedDatasetId
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useStore } from '@nanostores/react'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
-export const Route = createFileRoute('/datasets/$id')({ 
+export const Route = createFileRoute('/datasets/$id')({
   component: DatasetComponent,
   loader: ({ params }) => {
     $selectedDatasetId.set(params.id)
@@ -80,16 +81,26 @@ function DatasetComponent() {
                 {selectedDataset.suggestedPrompts && (
                   <div className="p-4 rounded-lg border bg-accent">
                     <h3 className="text-md font-medium mb-2">Suggested Questions</h3>
-                    <div className="space-y-2 divide-y max-h-[200px] overflow-y-auto pr-2">
-                      {selectedDataset.suggestedPrompts.map((prompt, index) => (
-                        <div
-                          key={index}
-                          className="w-full justify-start text-left"
-                          onClick={() => setQuestion(prompt)}
-                          dangerouslySetInnerHTML={{ __html: marked(prompt) }}
-                        >
-                        </div>
-                      ))}
+                    <div className="pr-2">
+                      <Accordion type="single" collapsible className="w-full">
+                        {selectedDataset.suggestedPrompts.map((prompt, index) => (
+                          <AccordionItem key={index} value={`item-${index}`}>
+                            <AccordionTrigger className="text-left">
+                              <div className="truncate" dangerouslySetInnerHTML={{ __html: marked(prompt.slice(0, 100) + "...") }} />
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              <div className="mb-2" dangerouslySetInnerHTML={{ __html: marked(prompt) }} />
+                              <Button
+                                variant="outline"
+                                className="text-left relative left-1/2 -translate-1/2 bottom-0"
+                                onClick={() => setQuestion(prompt)}
+                              >
+                                Use this question
+                              </Button>
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
                     </div>
                   </div>
                 )}
