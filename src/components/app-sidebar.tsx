@@ -5,8 +5,6 @@ import {
 } from "@/components/ui/sidebar"
 import { useStore } from "@nanostores/react"
 import { $datasets, $selectedDatasetId, $analyses, $selectedAnalysisId } from "@/stores/datasets"
-import { Button } from "@/components/ui/button"
-import { Upload } from "lucide-react"
 import { Link } from '@tanstack/react-router'
 
 export function AppSidebar() {
@@ -15,35 +13,13 @@ export function AppSidebar() {
   const analyses = useStore($analyses)
   const currentAnalysisId = useStore($selectedAnalysisId)
 
-  const handleUploadClick = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.csv,.xlsx,.json'
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0]
-      if (file) {
-        const event = new Event('change', { bubbles: true })
-        Object.defineProperty(event, 'target', { value: { files: [file] } })
-        document.querySelector('input[type="file"]')?.dispatchEvent(event)
-      }
-    }
-    input.click()
-  }
-
   return (
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center justify-between px-4">
-          <h2 className="text-lg font-semibold">Datalytics</h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleUploadClick}
-            className="shrink-0"
-            title="Upload Dataset"
-          >
-            <Upload className="h-4 w-4" />
-          </Button>
+          <Link to="/" className="hover:opacity-80">
+            <h2 className="text-lg font-semibold">Datalytics</h2>
+          </Link>
         </div>
       </SidebarHeader>
       <SidebarContent className="space-y-6">
